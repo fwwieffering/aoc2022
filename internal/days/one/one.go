@@ -9,10 +9,6 @@ import (
 )
 
 func addToSortedArray(curArr []int64, newItem int64) []int64 {
-	if len(curArr) == 1 {
-		curArr[0] = newItem
-		return curArr
-	}
 	// pop off last item of list
 	curIdx := 0
 	finalIdx := 0
