@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"strconv"
-	"time"
 
 	puzzleinput "github.com/fwwieffering/aoc2022/internal/puzzle-input"
 )
@@ -60,17 +59,14 @@ func getMaxElves(in [][]byte, numMaxElves int) []int64 {
 func Solve() error {
 	input := puzzleinput.Day(1)
 
-	startTime := time.Now()
 	// split bytes by line
 	lines := bytes.Split(input, []byte("\n"))
 	maxElves := getMaxElves(lines, 3)
-	duration := time.Now().Sub(startTime)
 	fmt.Printf("Part 1: elf with most calories has %d calories\n", maxElves[0])
 	var sum int64 = 0
 	for _, elf := range maxElves {
 		sum += elf
 	}
 	fmt.Printf("Part 2: top three elves %d\n", sum)
-	fmt.Printf("took: %d microseconds\n", duration.Microseconds())
 	return nil
 }

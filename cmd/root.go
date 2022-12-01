@@ -2,6 +2,8 @@ package cmd
 
 import (
 	"errors"
+	"fmt"
+	"time"
 
 	one "github.com/fwwieffering/aoc2022/internal/days/one"
 	"github.com/spf13/cobra"
@@ -15,10 +17,18 @@ var rootCmd = &cobra.Command{
 	Use:   "advent",
 	Short: "Run advent of code days",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		if dayInput == 0 || dayInput > 31 {
-			return errors.New("day must be between 1-31")
+		if dayInput == 0 || dayInput > 25 {
+			return errors.New("day must be between 1-25")
 		}
-		return dayFuncs[dayInput]()
+		f, ok := dayFuncs[dayInput]
+		if !ok {
+			return fmt.Errorf("day %d not yet implemented", dayInput)
+		}
+		start := time.Now()
+		err := f()
+		duration := time.Now().Sub(start)
+		fmt.Printf("took: %d microseconds\n", duration.Microseconds())
+		return err
 	},
 }
 
