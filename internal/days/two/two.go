@@ -7,30 +7,6 @@ import (
 	puzzleinput "github.com/fwwieffering/aoc2022/internal/puzzle-input"
 )
 
-var winningCombos = map[string]string{
-	"A": "Y",
-	"B": "Z",
-	"C": "X",
-}
-
-var drawMap = map[string]string{
-	"A": "X",
-	"B": "Y",
-	"C": "Z",
-}
-
-var lossMap = map[string]string{
-	"A": "Z",
-	"B": "X",
-	"C": "Y",
-}
-
-var scores = map[string]int{
-	"X": 1,
-	"Y": 2,
-	"Z": 3,
-}
-
 func scoreGamePart1(gamebytes []byte) int {
 	score := 0
 	// without modification (b-a)%3 == 0 for win, one for loss, two for draw
