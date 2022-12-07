@@ -103,7 +103,7 @@ func processFileSystem(in string) (*Dir, []*Dir) {
 	// process dirs into a directory
 	var allDirs = make([]*Dir, len(uniqueDirs))
 	idx := 0
-	for d, _ := range uniqueDirs {
+	for d := range uniqueDirs {
 		allDirs[idx] = d
 		idx++
 	}
