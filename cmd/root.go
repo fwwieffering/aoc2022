@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/fwwieffering/aoc2022/internal/days/eight"
 	"github.com/fwwieffering/aoc2022/internal/days/five"
 	"github.com/fwwieffering/aoc2022/internal/days/four"
 	"github.com/fwwieffering/aoc2022/internal/days/one"
@@ -23,6 +24,7 @@ var dayFuncs = map[int]func() error{
 	5: five.Solve,
 	6: six.Solve,
 	7: seven.Solve,
+	8: eight.Solve,
 }
 
 var rootCmd = &cobra.Command{
