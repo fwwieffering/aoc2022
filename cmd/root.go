@@ -15,6 +15,7 @@ import (
 	"github.com/fwwieffering/aoc2022/internal/days/six"
 	"github.com/fwwieffering/aoc2022/internal/days/ten"
 	"github.com/fwwieffering/aoc2022/internal/days/three"
+	"github.com/fwwieffering/aoc2022/internal/days/twelve"
 	"github.com/fwwieffering/aoc2022/internal/days/two"
 	"github.com/spf13/cobra"
 )
@@ -31,6 +32,7 @@ var dayFuncs = map[int]func() error{
 	9:  nine.Solve,
 	10: ten.Solve,
 	11: eleven.Solve,
+	12: twelve.Solve,
 }
 
 var rootCmd = &cobra.Command{
