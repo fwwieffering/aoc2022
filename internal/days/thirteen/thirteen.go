@@ -2,23 +2,11 @@ package thirteen
 
 import (
 	"fmt"
+	"sort"
 	"strconv"
 
 	puzzleinput "github.com/fwwieffering/aoc2022/internal/puzzle-input"
 )
-
-type Packet struct {
-	Left  []interface{}
-	Right []interface{}
-}
-
-func (p *Packet) SetSide(side string, data []interface{}) {
-	if side == "left" {
-		p.Left = data
-	} else {
-		p.Right = data
-	}
-}
 
 // return two bools - valid, final. if valid and not final keep going
 func validate(left, right []interface{}, level int, debug bool) (bool, bool) {
@@ -89,32 +77,19 @@ func ValidatePackets(left []interface{}, right []interface{}, debug bool) bool {
 	valid, _ := validate(left, right, 0, debug)
 	return valid
 }
-func (p *Packet) Validate(debug bool) bool {
-	valid, _ := validate(p.Left, p.Right, 0, debug)
-	return valid
-}
 
-func parsePackets(in []byte) []*Packet {
-	final := []*Packet{}
+func parsePackets(in []byte) [][]interface{} {
+	final := [][]interface{}{}
 
-	currentPacket := &Packet{}
 	var curArr *[]interface{} = nil
 	parentArrays := []*[]interface{}{}
-	packetSide := "left"
 	intStr := ""
 
-	for idx, b := range in {
+	for _, b := range in {
 		switch b {
 		// newline means an end of a packet or pair of packets if two
 		case '\n':
-			if in[idx-1] == '\n' {
-				final = append(final, currentPacket)
-				currentPacket = &Packet{}
-				packetSide = "left"
-			} else {
-				packetSide = "right"
-			}
-
+			continue
 		case '[':
 			if curArr == nil {
 				curArr = &[]interface{}{}
@@ -136,7 +111,7 @@ func parsePackets(in []byte) []*Packet {
 				curArr = parent
 				parentArrays = parentArrays[:len(parentArrays)-1]
 			} else {
-				currentPacket.SetSide(packetSide, *curArr)
+				final = append(final, *curArr)
 				curArr = nil
 			}
 		case ',':
@@ -151,21 +126,45 @@ func parsePackets(in []byte) []*Packet {
 		}
 	}
 	// hanging packet
-	if currentPacket.Left != nil && currentPacket.Right != nil {
-		final = append(final, currentPacket)
+	if curArr != nil {
+		final = append(final, *curArr)
 	}
 
 	return final
 }
 
-func part1(packets []*Packet) int {
+func part1(packets [][]interface{}) int {
 	part1 := 0
-	for idx, p := range packets {
-		if p.Validate(false) {
-			part1 += idx + 1
+	for idx := range packets {
+		if (idx+1)%2 == 0 {
+			isValid := ValidatePackets(packets[idx-1], packets[idx], false)
+			if isValid {
+				pairIdx := (idx + 1%2) / 2
+				part1 += pairIdx
+			}
 		}
 	}
 	return part1
+}
+
+func part2(packets [][]interface{}) int {
+	// add divider packets, then sort for part 2
+	packets = append(packets, []interface{}{[]interface{}{2}}, []interface{}{[]interface{}{6}})
+
+	sort.Slice(packets, func(i, j int) bool {
+		return ValidatePackets(packets[i], packets[j], false)
+	})
+	part2 := 1
+	for idx, p := range packets {
+		if len(p) == 1 {
+			if arr, ok := p[0].([]interface{}); ok && len(arr) == 1 {
+				if n, nOk := arr[0].(int); nOk && (n == 2 || n == 6) {
+					part2 *= (idx + 1)
+				}
+			}
+		}
+	}
+	return part2
 }
 
 func Solve() error {
@@ -173,8 +172,7 @@ func Solve() error {
 
 	packets := parsePackets(in)
 	fmt.Printf("Part1: %d\n", part1(packets))
-	// add divider packets, then sort for part 2
-	packets = append(packets)
 
+	fmt.Printf("Part 2: %d\n", part2(packets))
 	return nil
 }
