@@ -78,6 +78,7 @@ func ValidatePackets(left []interface{}, right []interface{}, debug bool) bool {
 	return valid
 }
 
+// I had fun writing this but could have just loaded json
 func parsePackets(in []byte) [][]interface{} {
 	final := [][]interface{}{}
 
